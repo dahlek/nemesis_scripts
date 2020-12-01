@@ -1,7 +1,7 @@
 # ammonium hydrosulfide lookup table doesn't work for our wavelengths - add constant complex n spectrum for now from https://www.researchgate.net/publication/249341931_Optical_constant_of_ammonium_hydrosulfide_ice_and_ammonia_ice
 # Specifically written for making Creme Brulee models; runs Makephase, Normxsc, and Dust_profile (not necessary if using 227 0 227 in .apr file)
 # run final call at end of file in a loop to complete grid searches for particle size or other parameters
-
+# WARNING: lots of hard-coded junk abounds herein; proceed with caution if you're not using this specifically for CB modeling in the optical
 
 import numpy as np
 import os
