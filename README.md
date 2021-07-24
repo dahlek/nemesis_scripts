@@ -1,4 +1,4 @@
-Python scripts I frequently use to run NEMESIS or analyze results.
+Python scripts I frequently use to run NEMESIS or analyze results. (everything's in python 2.7!)
 
 mre_reader.py - plots measured spectra and error, and fitted synthetic spectrum, as reported by the *.mre file.
 
