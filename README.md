@@ -6,3 +6,4 @@ aerosol_reader.py - plots the aerosol profile(s) from aerosol.prf
 
 nem_CB_wrapper.py - calls various NEMESIS routines to develop Creme Brulee models
 
+fcloud_maker.py - makes a new fcloud.ref file; helpful after using Profile to reconfigure pressure levels
