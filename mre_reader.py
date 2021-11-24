@@ -1,37 +1,43 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+'''
+Reads .mre file, plots measured and fit spectra. Accounts for different numbers of spectra/datapoints and calculates reduced chi squared from the .mre file
+'''
+
 directory = './'
 runname = 'jupiter'
-
 mrefile = directory+runname+'.mre'
-logfile = directory+'runname'+'.log'
-spx = directory+runname+'.spx'
+
+def reduced_chi_sq_finder(data,data_error,model):
+    '''
+    Takes two arays of the same dimension, calculates the chi sqaured value
+    Adapted from chi2.pro from James Sinclair
+    '''
+    N = len(data)
+    tmp = (data-model)/data_error
+    chi_sq = np.sum(tmp**2)/N
+    return chi_sq
 
 with open(mrefile,'r') as f:
     all_data=[x.split() for x in f.readlines()]
     #print all_data[0] # print the first line. will be a list.
     nlines=int(all_data[1][2]) # length of spectrum
+    n_spec = int(all_data[1][1])
     spec=np.asfarray(all_data[5:5+nlines]) # Pull all the spectral data, the bulk of the mre file !!!Hard coded distance from the top of the file
-    wl = spec[:,1]  # wavelength in microns
-    R_meas = spec[:,2] # Measured radiance (data)
-    error = spec[:,3] # error
-    R_fit = spec[:,5] # Fit radiance
+    num_spectral_points = int(nlines/n_spec)
+    for i in range(0,n_spec):
+        wl = spec[i*num_spectral_points:(i*num_spectral_points+num_spectral_points),1]  # wavelength in microns
+        R_meas = spec[i*num_spectral_points:(i*num_spectral_points+num_spectral_points),2] # Measured radiance (data)
+        error = spec[i*num_spectral_points:(i*num_spectral_points+num_spectral_points),3] # error
+        R_fit = spec[i*num_spectral_points:(i*num_spectral_points+num_spectral_points),5] # Fit radiance
+        plt.fill_between(wl,R_meas+error,R_meas-error,color='lightgray')
+        plt.plot(wl,R_meas,'black')
+        plt.plot(wl,R_fit,'red')
 
-# open log file and find chisq/ny
-with open(logfile,'r') as f:
-    all_data=[x.split() for x in f.readlines()]
-    for i in range(len(all_data)-200,len(all_data)):
-        if len(all_data[i]) == 0:
-            continue
-        if all_data[i][0] == 'chisq/ny':
-            chisq = all_data[i][2]
-            break
+chisq = reduced_chi_sq_finder(R_meas,error,R_fit)
 
 # plot data and fit
-plt.fill_between(wl,R_meas+error,R_meas-error,color='gray')
-plt.plot(wl,R_meas,'black')
-plt.plot(wl,R_fit)
 plt.title('chisq/ny = '+str(chisq))
 plt.ylabel('Radiance, nW/cm2/ster/micron')
 plt.xlabel('Wavelength (microns)')
