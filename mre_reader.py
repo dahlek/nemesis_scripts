@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 '''
 Reads .mre file, plots measured and fit spectra. Accounts for different numbers of spectra/datapoints and calculates reduced chi squared from the .mre file
+Emma Dahl, 2021
 '''
 
 directory = './'
